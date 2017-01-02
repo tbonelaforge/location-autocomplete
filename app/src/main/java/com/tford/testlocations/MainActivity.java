@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.security.KeyManagementException;
 import java.security.cert.X509Certificate;
 
@@ -38,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
         getTokenTask.execute();
     }
 
+    public void getLocations(View view) {
+        System.out.printf("Inside MainActivity.getLocations, got called...");
+        GetLocationsTask getLocationsTask = new GetLocationsTask(requestToken);
+        getLocationsTask.execute();
+    }
+
     private class GetTokenTask extends AsyncTask<Void, Void, String> {
         @Override
         protected String doInBackground(Void... params) {
@@ -53,6 +61,33 @@ public class MainActivity extends AppCompatActivity {
                 TextView tokenResponseTextView = (TextView) findViewById(R.id.token_response);
                 tokenResponseTextView.setText(requestToken);
             }
+        }
+    }
+
+    private class GetLocationsTask extends AsyncTask<Void, Void, JSONObject> {
+        private String token;
+
+        public GetLocationsTask(String token) {
+            this.token = token;
+        }
+
+        @Override
+        protected JSONObject doInBackground(Void... params) {
+            Log.d("MainActivity.GetLocationsTask.doInBackground", "Inside GetLocationsTask.doInBackground, got called!!!");
+            JSONObject locations = GetLocationsCommand.execute(getInsecureClient(), getToken());
+            return locations;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject locations) {
+            if (locations != null) {
+                TextView locationsTextView = (TextView) findViewById(R.id.locations_response);
+                locationsTextView.setText(locations.toString());
+            }
+        }
+
+        public String getToken() {
+            return token;
         }
     }
 

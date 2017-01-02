@@ -2,6 +2,9 @@ package com.tford.testlocations;
 
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -69,6 +72,21 @@ public class GetTokenCommand {
             throw new RuntimeException(String.format("Could not get body of response"));
         }
         Log.d("GetTokenCommand.extractToken", "The response body looks like" + responseBody.toString());
-        return "poopytoken";
+        //return "poopytoken";
+        String extracted;
+        JSONObject parsed;
+        String token;
+        try {
+            extracted = responseBody.string();
+            parsed = new JSONObject(extracted);
+            token = parsed.getString("access_token");
+        } catch (IOException e) {
+            Log.wtf("IOException while trying to stringify the body...", e);
+            return "poopytokenresponse";
+        } catch (JSONException e) {
+            Log.wtf("JSONException while trying to parse body...", e);
+            return "poopytokenjson";
+        }
+        return token;
     }
 }
