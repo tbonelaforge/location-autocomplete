@@ -22,9 +22,9 @@ import okhttp3.ResponseBody;
 public class GetLocationsCommand {
     private static final String url = "https://localapi.fitbit.com/1/poopy-profile-locations-with-state.json";
 
-    public static JSONObject execute(OkHttpClient client, String token) {
+    public static JSONObject execute(OkHttpClient client, String token, String query) {
         Log.d("GetLocationsCommand.execute", "Inside GetLocationsCommand.execute, got called!!!");
-        Request request = createRequest(token);
+        Request request = createRequest(token, query);
         Response response = null;
         JSONObject locations = null;
         try {
@@ -43,9 +43,9 @@ public class GetLocationsCommand {
         return locations;
     }
 
-    private static Request createRequest(String token) {
+    private static Request createRequest(String token, String query) {
         Request.Builder requestBuilder = new Request.Builder();
-        String urlWithQuery = url + "?filter[cityQuery]=Fruitvale";
+        String urlWithQuery = url + String.format("?filter[cityQuery]=%s", query);
         String authHeader = "Bearer " + token;
         requestBuilder.url(urlWithQuery)
                 .header("Authorization", authHeader)

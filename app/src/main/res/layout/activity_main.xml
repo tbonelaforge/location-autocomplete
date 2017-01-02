@@ -35,4 +35,12 @@
         android:textSize="16sp"
         android:textStyle="bold">
     </TextView>
-</LinearLayout>
+    <AutoCompleteTextView
+        android:id="@+id/locations_autocomplete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="">
+    </AutoCompleteTextView>
+
+    </LinearLayout>
