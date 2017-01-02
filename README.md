@@ -1,0 +1,1 @@
+Using Android autocomplete text view as a test for new locations endpoint.
